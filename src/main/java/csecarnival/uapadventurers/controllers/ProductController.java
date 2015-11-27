@@ -90,7 +90,9 @@ public class ProductController {
 	}
 	
 	// Find all categories
-	public List<String> getAllCategories(){
-		return productService.getAllCategories();
+	@RequestMapping(value="/subcategory",method=RequestMethod.GET)
+	@ResponseBody
+	public List<Product> getProductsBySubCategory(@RequestParam("name") String subCategoryName){
+		return productService.getProductsBySubCategory(subCategoryName);
 	}
 }

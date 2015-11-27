@@ -67,16 +67,16 @@ public class ProductService {
 		return productRepository.findById(id);
 	}
 
-	// Get all categiries
-	public List<String> getAllCategories() {
-//		productRepository.
-		return null;
-	}
 
 	// Pagination
 	public List<Product> getProductByRange(Integer start, Integer size) {
 		Page<Product> page= productRepository.findAll(new PageRequest(start, size));
 		return page.getContent();
+	}
+
+	// get product list by subcategory
+	public List<Product> getProductsBySubCategory(String subCategoryName) {
+		return productRepository.findBySubCategoryName(subCategoryName);
 	}
 	
 	
