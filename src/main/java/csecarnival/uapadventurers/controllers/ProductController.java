@@ -2,8 +2,10 @@ package csecarnival.uapadventurers.controllers;
 
 import java.io.EOFException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -46,7 +48,8 @@ public class ProductController {
 						// set path to user object
 						String imagePath = productService.uploadToletImage(multipartFile,
 								userService.findUserById(id).getPhoneNumber());
-
+						product.setProductImagePath(imagePath);
+						System.out.println("IMAGEPATH"+product.getProductImagePath());
 						return productService.saveProduct(product);
 
 					} catch (Exception e) {
@@ -70,6 +73,24 @@ public class ProductController {
 		return productService.getAllProductList();
 	}
 	
+	// find product by specific id
+	@RequestMapping(value="",method=RequestMethod.GET)
+	@ResponseBody
+	public Product getProductById(@RequestParam("id") Long id){
+		return productService.getProductById(id);
+	}
 	
-
+	// find product paginated (by range)
+	@RequestMapping(value="/range",method=RequestMethod.GET)
+	@ResponseBody
+	public List<Product> getProductByRange(@RequestParam Map<String, String> map){
+		int start = Integer.parseInt(map.get("start"));
+		int size = Integer.parseInt(map.get("size"));
+		return productService.getProductByRange(start, size);
+	}
+	
+	// Find all categories
+	public List<String> getAllCategories(){
+		return productService.getAllCategories();
+	}
 }

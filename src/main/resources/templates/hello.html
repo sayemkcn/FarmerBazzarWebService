@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"></meta>
 <title>Insert title here</title>
 </head>
 <body>
+
+	<form action="" th:action="@{/product}" method="post" >
+		<input type="text" name="email" placeholder="email"></input><br></br>
+		<select name="optionName">
+			<option value="one">one Option</option>
+		</select>
+		<input type="file" name="userImage">Image</input><br></br>
+		<input type="submit"></input>
+
+	</form>
 
 </body>
 </html>
