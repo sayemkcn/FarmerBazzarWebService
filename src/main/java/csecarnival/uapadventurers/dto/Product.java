@@ -23,6 +23,7 @@ public class Product extends BaseEntity{
 	private String expireDate;
 	private String location;
 	private String productImagePath;
+	private int userRating;
 	
 	public Long getId() {
 		return id;
@@ -81,6 +82,14 @@ public class Product extends BaseEntity{
 	}
 	
 	
+	
+	
+	public int getUserRating() {
+		return userRating;
+	}
+	public void setUserRating(int userRating) {
+		this.userRating = userRating;
+	}
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", productName=" + productName + ", productDescription=" + productDescription

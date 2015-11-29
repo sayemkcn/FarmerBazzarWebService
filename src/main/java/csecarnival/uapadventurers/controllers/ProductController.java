@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import csecarnival.uapadventurers.dto.Product;
+import csecarnival.uapadventurers.dto.User;
 import csecarnival.uapadventurers.service.ProductService;
 import csecarnival.uapadventurers.service.UserService;
 
@@ -36,7 +37,8 @@ public class ProductController {
 	@RequestMapping(value = "/{id}/newProduct", method = RequestMethod.POST)
 	@ResponseBody
 	public Product uploadProduct(@ModelAttribute Product product, BindingResult bindingResult,
-			@RequestParam("productImage") MultipartFile multipartFile, @PathVariable("id") Long id) throws EOFException {
+			@RequestParam("productImage") MultipartFile multipartFile, @PathVariable("id") Long id)
+					throws EOFException {
 
 		if (!bindingResult.hasErrors()) {
 			// check if multipart file is empty or not
@@ -49,7 +51,7 @@ public class ProductController {
 						String imagePath = productService.uploadToletImage(multipartFile,
 								userService.findUserById(id).getPhoneNumber());
 						product.setProductImagePath(imagePath);
-						System.out.println("IMAGEPATH"+product.getProductImagePath());
+						System.out.println("IMAGEPATH" + product.getProductImagePath());
 						return productService.saveProduct(product);
 
 					} catch (Exception e) {
@@ -66,33 +68,49 @@ public class ProductController {
 		}
 
 	}
+
 	// get all products
-	@RequestMapping(value="/all",method=RequestMethod.GET)
+	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Product> getAllProducts(){
+	public List<Product> getAllProducts() {
 		return productService.getAllProductList();
 	}
-	
+
 	// find product by specific id
-	@RequestMapping(value="",method=RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	@ResponseBody
-	public Product getProductById(@RequestParam("id") Long id){
+	public Product getProductById(@RequestParam("id") Long id) {
 		return productService.getProductById(id);
 	}
-	
+
 	// find product paginated (by range)
-	@RequestMapping(value="/range",method=RequestMethod.GET)
+	@RequestMapping(value = "/range", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Product> getProductByRange(@RequestParam Map<String, String> map){
+	public List<Product> getProductByRange(@RequestParam Map<String, String> map) {
 		int start = Integer.parseInt(map.get("start"));
 		int size = Integer.parseInt(map.get("size"));
 		return productService.getProductByRange(start, size);
 	}
-	
+
 	// Find all categories
-	@RequestMapping(value="/subcategory",method=RequestMethod.GET)
+	@RequestMapping(value = "/subcategory", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Product> getProductsBySubCategory(@RequestParam("name") String subCategoryName){
+	public List<Product> getProductsBySubCategory(@RequestParam("name") String subCategoryName) {
 		return productService.getProductsBySubCategory(subCategoryName);
 	}
+
+	@RequestMapping(value = "/rate/{productId}",method=RequestMethod.POST)
+	@ResponseBody
+	public Product rateProduct(@PathVariable("productId") Long productId, @RequestParam("rating") int rating,
+			@RequestParam("token") String token) {
+		User user = userService.findUserByToken(token);
+		if (user != null) {
+			Product product = productService.getProductById(productId);
+			product.setUserRating(rating);
+			productService.saveProduct(product);
+			return product;
+		}
+		return null;
+	}
+	
 }

@@ -51,7 +51,7 @@ public class ProductService {
 		BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(imageFile));
 		bufferedOutputStream.write(bytes);
 		bufferedOutputStream.close();
-		return File.separator + "AppData" + File.separator + "BdTolet" + File.separator + phoneNumber + File.separator
+		return File.separator + "AppData" + File.separator + "farmerbazzar" + File.separator + phoneNumber + File.separator
 				+ imageFile.getName();
 	}
 

@@ -1,12 +1,20 @@
 package csecarnival.uapadventurers.controllers;
 
 import java.io.EOFException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +35,7 @@ public class UserController {
 		return "index";
 	}
 
+	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
 	public User register(@ModelAttribute User user, BindingResult bindingResult,@RequestParam("userImage") MultipartFile multipartFile)
@@ -89,5 +98,15 @@ public class UserController {
 	public User getUserByToken(@RequestParam("token") String token){
 		User user = userService.findUserByToken(token);
 		return user;
+	}
+	
+	@RequestMapping(value="/image",method=RequestMethod.GET)
+	public String showImage(@RequestParam("imagePath") String imagePath,Model model) {
+		String rootPath = System.getProperty("catalina.home");
+//		File file = new File(rootPath+File.separator+imagePath);
+		model.addAttribute("imagePath",rootPath+File.separator+imagePath);
+		return "showImage";
+//		model.addAttribute("imagePath",rootPath+imagePath);
+//		return rootPath+imagePath;
 	}
 }
